@@ -1,6 +1,6 @@
 ﻿namespace Dima.Api.Data;
 
-public class AppDbContext
+public class AppDbContext 
 {
     
 }
