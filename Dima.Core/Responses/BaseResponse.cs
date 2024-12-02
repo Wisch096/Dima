@@ -4,17 +4,16 @@ namespace Dima.Core.Responses;
 
 public class BaseResponse<TData>
 {
-    private const int DefaultStatusCode = 200;
     private readonly int _code;
 
     [JsonConstructor]
-    public BaseResponse() => _code = DefaultStatusCode;
+    public BaseResponse() => _code = Configuration.DefaultStatusCode;
     
     public BaseResponse(TData? data, int code = 200, string? message = null)
     {
         Data = data;
         Message = message;
-        _code = DefaultStatusCode;
+        _code = Configuration.DefaultStatusCode;
     }
     
     public TData? Data { get; set; }
