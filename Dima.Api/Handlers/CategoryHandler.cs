@@ -79,9 +79,23 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
         }
     }
 
-    public Task<BaseResponse<Category?>> GetByIdAsync(GetCategoryByIdRequest request)
+    public async Task<BaseResponse<Category?>> GetByIdAsync(GetCategoryByIdRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var category = await context
+                .Categories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
+
+            return category is null
+                ? new BaseResponse<Category?>(null, 404, "Categoria não encontrada")
+                : new BaseResponse<Category?>(category);
+        }
+        catch
+        {
+            return new BaseResponse<Category?>(null, 500, "Não foi possível recuperar a categoria.");
+        }
     }
 
     public Task<List<Category>> GetAllAsync(GetAllCategoriesRequest request)

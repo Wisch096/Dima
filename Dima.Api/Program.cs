@@ -40,20 +40,20 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapPost(
-    "/v1/categories",
-    (CreateCategoryRequest request, ICategoryHandler handler) => handler.CreateAsync(request))
+    "/v1/categories", async (CreateCategoryRequest request, ICategoryHandler handler) 
+        => await handler.CreateAsync(request))
     .WithName("Categories: Create")
     .WithSummary("Cria uma nova categoria")
     .Produces<BaseResponse<Category>>();
 
 app.MapPut(
         "/v1/categories/{id}",
-        (long id, UpdateCategoryRequest request, 
+        async (long id, UpdateCategoryRequest request, 
             ICategoryHandler handler) 
             =>
         {
             request.Id = id;
-            handler.UpdateAsync(request);
+            return await handler.UpdateAsync(request);
         })
     .WithName("Categories: Update")
     .WithSummary("Atualiza uma categoria")
@@ -61,15 +61,26 @@ app.MapPut(
 
 app.MapDelete(
         "/v1/categories/{id}",
-        (long id, DeleteCategoryRequest request, 
-            ICategoryHandler handler) 
+        async (long id, ICategoryHandler handler) 
             =>
         {
-            request.Id = id;
-             handler.DeleteAsync(request);
+            var request = new DeleteCategoryRequest { Id = id };
+            return await handler.DeleteAsync(request);
         })
     .WithName("Categories: Delete")
     .WithSummary("Exclui uma categoria")
+    .Produces<BaseResponse<Category>>();
+
+app.MapGet(
+        "/v1/categories/{id}",
+        async (long id, ICategoryHandler handler) 
+            =>
+        {
+            var request = new GetCategoryByIdRequest() { Id = id, UserId = "matheus@email.com"};
+            return await handler.GetByIdAsync(request);
+        })
+    .WithName("Categories: GetById")
+    .WithSummary("Retorna uma categoria")
     .Produces<BaseResponse<Category>>();
 
 app.Run();
