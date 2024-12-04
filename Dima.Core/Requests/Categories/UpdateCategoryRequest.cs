@@ -2,7 +2,7 @@
 
 namespace Dima.Core.Requests.Categories;
 
-public class UpdateCategoryRequests : BaseRequest
+public class UpdateCategoryRequest : BaseRequest
 {
     public long Id { get; set; }
     [Required(ErrorMessage = "Título inválido")]

@@ -31,7 +31,7 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
         }
     }
 
-    public async Task<BaseResponse<Category?>> UpdateAsync(UpdateCategoryRequests request)
+    public async Task<BaseResponse<Category?>> UpdateAsync(UpdateCategoryRequest request)
     {
         try
         {
@@ -56,9 +56,27 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
         }
     }
 
-    public Task<BaseResponse<Category?>> DeleteAsync(DeleteCategoryRequest request)
+    public async Task<BaseResponse<Category?>> DeleteAsync(DeleteCategoryRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var category = await context
+                .Categories
+                .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
+        
+            if(category is null)
+                return new BaseResponse<Category?>(null, 404, "Categoria não encontrada");
+        
+            context.Categories.Remove(category);
+            await context.SaveChangesAsync();
+            
+            return new BaseResponse<Category?>(category, message: "Categoria excluída com sucesso.");
+        }
+        catch 
+        {
+            return new BaseResponse<Category?>(null, 500, "Não foi possível excluir a categoria.");
+
+        }
     }
 
     public Task<BaseResponse<Category?>> GetByIdAsync(GetCategoryByIdRequest request)

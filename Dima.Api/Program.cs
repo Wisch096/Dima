@@ -46,6 +46,32 @@ app.MapPost(
     .WithSummary("Cria uma nova categoria")
     .Produces<BaseResponse<Category>>();
 
+app.MapPut(
+        "/v1/categories/{id}",
+        (long id, UpdateCategoryRequest request, 
+            ICategoryHandler handler) 
+            =>
+        {
+            request.Id = id;
+            handler.UpdateAsync(request);
+        })
+    .WithName("Categories: Update")
+    .WithSummary("Atualiza uma categoria")
+    .Produces<BaseResponse<Category>>();
+
+app.MapDelete(
+        "/v1/categories/{id}",
+        (long id, DeleteCategoryRequest request, 
+            ICategoryHandler handler) 
+            =>
+        {
+            request.Id = id;
+             handler.DeleteAsync(request);
+        })
+    .WithName("Categories: Delete")
+    .WithSummary("Exclui uma categoria")
+    .Produces<BaseResponse<Category>>();
+
 app.Run();
 
 
