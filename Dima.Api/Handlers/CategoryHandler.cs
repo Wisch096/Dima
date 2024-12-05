@@ -98,8 +98,32 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
         }
     }
 
-    public Task<List<Category>> GetAllAsync(GetAllCategoriesRequest request)
+    public async Task<PagedResponse<List<Category>>> GetAllAsync(GetAllCategoriesRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var query = context
+                .Categories
+                .AsNoTracking()
+                .Where(x => x.UserId == request.UserId)
+                .OrderBy(x => x.Title);
+        
+            var categories = await query
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync();
+        
+            var count = await query.CountAsync();
+        
+            return new PagedResponse<List<Category>>(
+                categories, 
+                count, 
+                request.PageNumber, 
+                request.PageSize);
+        }
+        catch
+        {
+            return new PagedResponse<List<Category>>(null, 500, "Não foi possível consultar as categorias.");
+        }
     }
 }
