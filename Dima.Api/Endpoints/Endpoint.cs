@@ -1,5 +1,6 @@
 ﻿using Dima.Api.Common.Api;
 using Dima.Api.Endpoints.Categories;
+using Dima.Core.Requests.Categories;
 
 namespace Dima.Api.Endpoints;
 
@@ -11,7 +12,11 @@ public static class Endpoint
 
         endpoints.MapGroup("v1/categories")
             .WithTags("Categories")
-            .MapEndpoint<CreateCategoryEndpoint>();
+            .MapEndpoint<CreateCategoryEndpoint>()
+            .MapEndpoint<UpdateCategoryEndpoint>()
+            .MapEndpoint<DeleteCategoryEndpoint>()
+            .MapEndpoint<GetCategoryByIdEndpoint>()
+            .MapEndpoint<GetAllCategoriesEndpoint>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)

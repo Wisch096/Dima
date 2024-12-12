@@ -13,7 +13,7 @@ public class DeleteCategoryEndpoint : IEndpoint
             .WithName("Categories: Delete")
             .WithSummary("Exclui uma categoria")
             .WithDescription("Exclui uma categoria")
-            .WithOrder(2)
+            .WithOrder(3)
             .Produces<BaseResponse<Category?>>();
 
     private static async Task<IResult> HandleAsync(
