@@ -1,4 +1,5 @@
 using Dima.Api.Data;
+using Dima.Api.Endpoints;
 using Dima.Api.Handlers;
 using Dima.Core.Handlers;
 using Dima.Core.Models;
@@ -39,61 +40,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.MapPost(
-    "/v1/categories", async (CreateCategoryRequest request, ICategoryHandler handler) 
-        => await handler.CreateAsync(request))
-    .WithName("Categories: Create")
-    .WithSummary("Cria uma nova categoria")
-    .Produces<BaseResponse<Category>>();
+app.MapGet("/ping", () => new { message = "pong" });
 
-app.MapPut(
-        "/v1/categories/{id}",
-        async (long id, UpdateCategoryRequest request, 
-            ICategoryHandler handler) 
-            =>
-        {
-            request.Id = id;
-            return await handler.UpdateAsync(request);
-        })
-    .WithName("Categories: Update")
-    .WithSummary("Atualiza uma categoria")
-    .Produces<BaseResponse<Category>>();
-
-app.MapDelete(
-        "/v1/categories/{id}",
-        async (long id, ICategoryHandler handler) 
-            =>
-        {
-            var request = new DeleteCategoryRequest { Id = id };
-            return await handler.DeleteAsync(request);
-        })
-    .WithName("Categories: Delete")
-    .WithSummary("Exclui uma categoria")
-    .Produces<BaseResponse<Category>>();
-
-app.MapGet(
-        "/v1/categories/{id}",
-        async (long id, ICategoryHandler handler) 
-            =>
-        {
-            var request = new GetCategoryByIdRequest() { Id = id, UserId = "matheus@email.com"};
-            return await handler.GetByIdAsync(request);
-        })
-    .WithName("Categories: GetById")
-    .WithSummary("Retorna uma categoria")
-    .Produces<BaseResponse<Category>>();
-
-app.MapGet(
-        "/v1/categories/",
-        async (ICategoryHandler handler) 
-            =>
-        {
-            var request = new GetAllCategoriesRequest() { UserId = "matheus@email.com"};
-            return await handler.GetAllAsync(request);
-        })
-    .WithName("Categories: Get All")
-    .WithSummary("Retorna todas as categorias de um usuário")
-    .Produces<PagedResponse<List<Category>>>();
+app.MapEndpoints();
 
 app.Run();
 
