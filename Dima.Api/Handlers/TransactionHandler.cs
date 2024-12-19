@@ -43,9 +43,19 @@ public class TransactionHandler(AppDbContext context) : ITransactionHandler
                 .Transactions
                 .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
 
-            return transaction is null 
-                ? new BaseResponse<Transaction?>(null, 404, "Transação não encontrada!") 
-                : new BaseResponse<Transaction?>(transaction);
+            if (transaction is null)
+                return new BaseResponse<Transaction?>(null, 404, "Transação não encontrada!"); 
+                    
+            transaction.CategoryId = request.CategoryId;
+            transaction.Amount = request.Amount;
+            transaction.Title = request.Title;
+            transaction.Type = request.Type;
+            transaction.PaidOrReceivedAt = request.PaidOrReceivedAt;
+            
+            context.Transactions.Update(transaction);
+            await context.SaveChangesAsync();
+            
+            return new BaseResponse<Transaction?>(transaction);
         }
         catch
         {
@@ -53,9 +63,26 @@ public class TransactionHandler(AppDbContext context) : ITransactionHandler
         }
     }
 
-    public Task<BaseResponse<Transaction?>> DeleteAsync(DeleteTransactionRequest request)
+    public async Task<BaseResponse<Transaction?>> DeleteAsync(DeleteTransactionRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var transaction = await context
+                .Transactions
+                .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
+            
+            if (transaction is null)
+                return new BaseResponse<Transaction?>(null, 404, "Transação não encontrada!") 
+                    
+            context.Transactions.Remove(transaction);
+            await context.SaveChangesAsync();
+            
+            return new BaseResponse<Transaction?>(transaction);
+        }
+        catch
+        {
+            return new BaseResponse<Transaction?>(null, 500, "Não foi possível atualizar a transação.");
+        }
     }
 
     public Task<BaseResponse<Transaction?>> GetByIdAsync(GetTransactionByIdRequest request)
