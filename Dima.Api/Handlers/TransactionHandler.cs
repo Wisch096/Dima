@@ -3,6 +3,7 @@ using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Transactions;
 using Dima.Core.Responses;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dima.Api.Handlers;
 
@@ -34,9 +35,22 @@ public class TransactionHandler(AppDbContext context) : ITransactionHandler
         }
     }
 
-    public Task<BaseResponse<Transaction?>> UpdateAsync(UpdateTransactionRequest request)
+    public async Task<BaseResponse<Transaction?>> UpdateAsync(UpdateTransactionRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var transaction = await context
+                .Transactions
+                .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
+
+            return transaction is null 
+                ? new BaseResponse<Transaction?>(null, 404, "Transação não encontrada!") 
+                : new BaseResponse<Transaction?>(transaction);
+        }
+        catch
+        {
+            return new BaseResponse<Transaction?>(null, 500, "Não foi possível atualizar a transação.");
+        }
     }
 
     public Task<BaseResponse<Transaction?>> DeleteAsync(DeleteTransactionRequest request)
