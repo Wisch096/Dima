@@ -85,9 +85,22 @@ public class TransactionHandler(AppDbContext context) : ITransactionHandler
         }
     }
 
-    public Task<BaseResponse<Transaction?>> GetByIdAsync(GetTransactionByIdRequest request)
+    public async Task<BaseResponse<Transaction?>> GetByIdAsync(GetTransactionByIdRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var transaction = await context
+                .Transactions
+                .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
+
+           return transaction is null
+                ? new BaseResponse<Transaction?>(null, 404, "Transação não encontrada!")
+                : new BaseResponse<Transaction?>(transaction);    
+        }
+        catch
+        {
+            return new BaseResponse<Transaction?>(null, 500, "Não foi possível atualizar a transação.");
+        }
     }
 
     public Task<PagedResponse<List<Transaction?>>> GetByPeriodAsync(GetTransactionByPeriodRequest request)
