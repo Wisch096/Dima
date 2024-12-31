@@ -105,6 +105,6 @@ public class TransactionHandler(AppDbContext context) : ITransactionHandler
 
     public Task<PagedResponse<List<Transaction?>>> GetByPeriodAsync(GetTransactionByPeriodRequest request)
     {
-        throw new NotImplementedException();
+        request.
     }
 }
