@@ -70,9 +70,9 @@ public class TransactionHandler(AppDbContext context) : ITransactionHandler
             var transaction = await context
                 .Transactions
                 .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
-            
+
             if (transaction is null)
-                return new BaseResponse<Transaction?>(null, 404, "Transação não encontrada!") 
+                return new BaseResponse<Transaction?>(null, 404, "Transação não encontrada!"); 
                     
             context.Transactions.Remove(transaction);
             await context.SaveChangesAsync();
