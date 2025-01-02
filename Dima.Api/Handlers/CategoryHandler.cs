@@ -50,7 +50,7 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
             
             return new BaseResponse<Category?>(category, message: "Categoria atualizada com sucesso.");
         }
-        catch (Exception e)
+        catch
         {
             return new BaseResponse<Category?>(null, 500, "Não foi possível alterar a categoria.");
         }
