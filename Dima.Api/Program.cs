@@ -5,6 +5,7 @@ using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
 using Dima.Core.Responses;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,11 @@ builder
     .Services
     .AddTransient<ICategoryHandler, CategoryHandler>();
 
+
+builder.Services
+    .AddAuthentication()
+    .AddIdentityCookies();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
