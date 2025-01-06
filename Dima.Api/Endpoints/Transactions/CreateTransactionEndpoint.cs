@@ -4,6 +4,7 @@ using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
 using Dima.Core.Requests.Transactions;
 using Dima.Core.Responses;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dima.Api.Endpoints.Transactions;
 
@@ -19,7 +20,7 @@ public class CreateTransactionEndpoint : IEndpoint
     
     private static async Task<IResult> HandleAsync(
         ITransactionHandler handler,
-        CreateTransactionRequest request)
+        [FromBody] CreateTransactionRequest request)
     {
         request.UserId = "matheus@gmail.com";
         var result = await handler.CreateAsync(request);

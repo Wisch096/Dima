@@ -3,6 +3,7 @@ using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
 using Dima.Core.Responses;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dima.Api.Endpoints.Categories;
 
@@ -18,7 +19,7 @@ public class CreateCategoryEndpoint : IEndpoint
     
     private static async Task<IResult> HandleAsync(
         ICategoryHandler handler,
-        CreateCategoryRequest request)
+        [FromBody] CreateCategoryRequest request)
     {
         request.UserId = "matheus@gmail.com";
         var result = await handler.CreateAsync(request);

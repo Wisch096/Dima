@@ -3,6 +3,7 @@ using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
 using Dima.Core.Responses;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dima.Api.Endpoints.Categories;
 
@@ -18,7 +19,7 @@ public class UpdateCategoryEndpoint : IEndpoint
 
     private static async Task<IResult> HandleAsync(
         ICategoryHandler handler, 
-        UpdateCategoryRequest request, 
+        [FromBody] UpdateCategoryRequest request, 
         long id)
     {
         request.UserId = "matheus@gmail.com";

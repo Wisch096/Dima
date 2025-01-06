@@ -4,6 +4,7 @@ using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
 using Dima.Core.Requests.Transactions;
 using Dima.Core.Responses;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dima.Api.Endpoints.Transactions;
 
@@ -19,7 +20,7 @@ public class UpdateTransactionEndpoint : IEndpoint
 
     private static async Task<IResult> HandleAsync(
         ITransactionHandler handler, 
-        UpdateTransactionRequest request, 
+        [FromBody] UpdateTransactionRequest request, 
         long id)
     {
         request.UserId = "matheus@gmail.com";

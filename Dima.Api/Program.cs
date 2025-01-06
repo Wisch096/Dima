@@ -1,23 +1,32 @@
+using System.Security.Claims;
 using Dima.Api.Data;
 using Dima.Api.Endpoints;
 using Dima.Api.Handlers;
 using Dima.Api.Models;
 using Dima.Core.Handlers;
-using Dima.Core.Models;
-using Dima.Core.Requests.Categories;
-using Dima.Core.Responses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var cnnStr = builder
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(n => n.FullName);
+});
+
+builder.Services
+    .AddAuthentication(IdentityConstants.ApplicationScheme)
+    .AddIdentityCookies();
+builder.Services.AddAuthorization();
+
+var conStr = builder
     .Configuration
     .GetConnectionString("DefaultConnection") ?? string.Empty;
 
-builder.Services.AddDbContext<AppDbContext>(x =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    x.UseSqlServer(cnnStr);
+    options.UseSqlServer(conStr);
 });
 
 builder.Services
@@ -26,44 +35,55 @@ builder.Services
     .AddEntityFrameworkStores<AppDbContext>()
     .AddApiEndpoints();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(x =>
-{
-    x.CustomSchemaIds(n => n.FullName);
-});
-builder
-    .Services
-    .AddTransient<ICategoryHandler, CategoryHandler>();
-
-
-builder.Services
-    .AddAuthentication()
-    .AddIdentityCookies();
-builder.Services.AddAuthorization();
+builder.Services.AddTransient<ICategoryHandler, CategoryHandler>();
+builder.Services.AddTransient<ITransactionHandler, TransactionHandler>();
 
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dima API V1");
-        c.RoutePrefix = string.Empty; 
-    });
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapGet("/ping", () => new { message = "pong" });
-
 app.MapEndpoints();
+app.MapGroup("v1/identity")
+    .WithTags("Identity")
+    .MapIdentityApi<User>();
+
+app.MapGroup("v1/identity")
+    .WithTags("Identity")
+    .MapPost("/logout",
+        async (SignInManager<User> signInManager) =>
+        {
+            await signInManager.SignOutAsync();
+            return Results.Ok();
+        })
+    .RequireAuthorization();
+
+app.MapGroup("v1/identity")
+    .WithTags("Identity")
+    .MapGet("/roles", (ClaimsPrincipal user) =>
+    {
+        if (user.Identity is null || !user.Identity.IsAuthenticated)
+            return Results.Unauthorized();
+
+        var identity = (ClaimsIdentity)user.Identity;
+
+        var roles = identity
+            .FindAll(identity.RoleClaimType)
+            .Select(c => new
+            {
+                c.Issuer,
+                c.OriginalIssuer,
+                c.Type,
+                c.Value,
+                c.ValueType
+            });
+
+        return TypedResults.Json(roles);
+    })
+    .RequireAuthorization();
 
 app.Run();
-
-
-
-
-
-
