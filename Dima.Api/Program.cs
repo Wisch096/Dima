@@ -70,7 +70,7 @@ app.MapGroup("v1/identity")
             return Results.Unauthorized();
 
         var identity = (ClaimsIdentity)user.Identity;
-
+   
         var roles = identity
             .FindAll(identity.RoleClaimType)
             .Select(c => new
