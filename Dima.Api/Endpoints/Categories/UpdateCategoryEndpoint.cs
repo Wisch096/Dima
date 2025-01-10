@@ -24,7 +24,7 @@ public class UpdateCategoryEndpoint : IEndpoint
         [FromBody] UpdateCategoryRequest request, 
         long id)
     {
-        request.UserId = user.Identity?.Name ?? string.Empty,
+        request.UserId = user.Identity?.Name ?? string.Empty;
         request.Id = id;
         
         var result = await handler.UpdateAsync(request);
