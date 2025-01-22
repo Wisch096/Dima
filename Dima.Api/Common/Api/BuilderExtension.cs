@@ -1,6 +1,8 @@
 ﻿using Dima.Api.Data;
+using Dima.Api.Handlers;
 using Dima.Api.Models;
 using Dima.Core;
+using Dima.Core.Handlers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,5 +48,11 @@ public static class BuilderExtension
             .AddRoles<IdentityRole<long>>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddApiEndpoints();
+    }
+
+    public static void AddServices(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddTransient<ICategoryHandler, CategoryHandler>();
+        builder.Services.AddTransient<ITransactionHandler, TransactionHandler>();
     }
 }
