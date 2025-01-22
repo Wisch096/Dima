@@ -12,15 +12,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.AddConfiguration();
 
-
-
-builder.Services
-    .AddAuthentication(IdentityConstants.ApplicationScheme)
-    .AddIdentityCookies();
-builder.Services.AddAuthorization();
-
-var conStr = 
-
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(Configuration.ConnectionString);

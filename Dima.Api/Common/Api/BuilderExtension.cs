@@ -1,4 +1,5 @@
 ﻿using Dima.Core;
+using Microsoft.AspNetCore.Identity;
 
 namespace Dima.Api.Common.Api;
 
@@ -20,5 +21,13 @@ public static class BuilderExtension
         {
             options.CustomSchemaIds(n => n.FullName);
         });
+    }
+
+    public static void AddSecurity(this WebApplicationBuilder builder)
+    {
+        builder.Services
+            .AddAuthentication(IdentityConstants.ApplicationScheme)
+            .AddIdentityCookies();
+        builder.Services.AddAuthorization();
     }
 }
