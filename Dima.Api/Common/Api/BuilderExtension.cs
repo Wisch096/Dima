@@ -50,6 +50,11 @@ public static class BuilderExtension
             .AddApiEndpoints();
     }
 
+    public static void AddCorsOrigin(this WebApplicationBuilder builder)
+    {
+        
+    }
+
     public static void AddServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddTransient<ICategoryHandler, CategoryHandler>();

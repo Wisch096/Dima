@@ -1,26 +1,22 @@
 using System.Security.Claims;
 using Dima.Api.Common.Api;
-using Dima.Api.Data;
 using Dima.Api.Endpoints;
-using Dima.Api.Handlers;
 using Dima.Api.Models;
-using Dima.Core;
-using Dima.Core.Handlers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.AddConfiguration();
-
-
-
-
+builder.AddSecurity();
+builder.AddDataContexts();
+builder.AddCorsOrigin();
+builder.AddDocumentation();
+builder.AddServices();
 
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseSwagger();
 app.UseSwaggerUI();
 
