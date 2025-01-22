@@ -12,4 +12,13 @@ public static class BuilderExtension
                 .GetConnectionString("DefaultConnection") 
              ?? string.Empty;
     }
+
+    public static void AddDocumentation(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.CustomSchemaIds(n => n.FullName);
+        });
+    }
 }

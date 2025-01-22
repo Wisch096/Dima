@@ -12,11 +12,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.AddConfiguration();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.CustomSchemaIds(n => n.FullName);
-});
+
 
 builder.Services
     .AddAuthentication(IdentityConstants.ApplicationScheme)
