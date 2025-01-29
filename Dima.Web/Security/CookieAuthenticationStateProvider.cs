@@ -3,7 +3,7 @@ using System.Security.Claims;
 using Dima.Core.Models.Account;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace Dima.Web.Secutiry;
+namespace Dima.Web.Security;
 
 public class CookieAuthenticationStateProvider(IHttpClientFactory httpClientFactory) : AuthenticationStateProvider, ICookieAuthenticationStateProvider
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 
-namespace Dima.Web.Secutiry;
+namespace Dima.Web.Security;
 
 public interface ICookieAuthenticationStateProvider
 {

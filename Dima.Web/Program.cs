@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Dima.Web;
 using Dima.Web.Handlers;
-using Dima.Web.Secutiry;
+using Dima.Web.Security;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 
@@ -19,7 +19,9 @@ builder.Services.AddScoped<CookieHandler>();
 builder.Services.AddAuthorizationCore();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthenticationStateProvider>();
-builder.Services.AddScoped(x => (ICookieAuthenticationStateProvider)x.GetRequiredService<AuthenticationStateProvider>());
+
+builder.Services.AddScoped(x =>
+    (ICookieAuthenticationStateProvider)x.GetRequiredService<AuthenticationStateProvider>());
 
 builder.Services.AddMudServices();
 

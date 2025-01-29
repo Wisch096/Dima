@@ -64,9 +64,9 @@ public static class BuilderExtension
                         Configuration.FrontendUrl
                     ])
                     .AllowAnyMethod()
-                    .AllowAnyMethod()
+                    .AllowAnyHeader()
                     .AllowCredentials()
-                ));
+            ));
     }
 
     public static void AddServices(this WebApplicationBuilder builder)
