@@ -1,6 +1,8 @@
 ﻿@page "/comecar"
 @layout HeadLessLayout
+@using Dima.Web.Secutiry
 @inherits RegisterPage
+@inject CookieAuthenticationStateProvider authState
 
 <PageTitle>Dima - Entrar</PageTitle>
 
@@ -14,7 +16,7 @@
                      width="200"
                 />
             </div>
-            <MudForm @ref="_mudForm">
+            <MudForm @ref="MudForm">
                 <MudTextField 
                     T="string" 
                     Label="E-mail" 
