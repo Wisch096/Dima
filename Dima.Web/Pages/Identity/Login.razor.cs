@@ -55,6 +55,8 @@ public partial class LoginPage : ComponentBase
 
             if (result.IsSuccess)
             {
+                await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                AuthenticationStateProvider.NotifyAuthenticationStateChanged();
                 NavigationManager.NavigateTo("/");
             }
             else
