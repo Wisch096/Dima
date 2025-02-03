@@ -1,34 +1,45 @@
-﻿using Dima.Core.Handlers;
+﻿using System.Net.Http.Json;
+using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
 using Dima.Core.Responses;
 
 namespace Dima.Web.Handlers;
 
-public class CategoryHandler : ICategoryHandler
+public class CategoryHandler(IHttpClientFactory httpClientFactory) : ICategoryHandler
 {
-    public Task<BaseResponse<Category>> CreateAsync(CreateCategoryRequest request)
+    private readonly HttpClient _client = httpClientFactory.CreateClient(Configuration.HttpClientName);
+    
+    public async Task<BaseResponse<Category>> CreateAsync(CreateCategoryRequest request)
     {
-        throw new NotImplementedException();
+        var result = await _client.PostAsJsonAsync("v1/categories", request);
+        return await result.Content.ReadFromJsonAsync<BaseResponse<Category>>()
+            ?? new BaseResponse<Category>(null, 400, "Falha ao criar uma categoria");
     }
 
-    public Task<BaseResponse<Category?>> UpdateAsync(UpdateCategoryRequest request)
+    public async Task<BaseResponse<Category?>> UpdateAsync(UpdateCategoryRequest request)
     {
-        throw new NotImplementedException();
+        var result = await _client.PutAsJsonAsync($"v1/categories{request.Id}", request);
+        return await result.Content.ReadFromJsonAsync<BaseResponse<Category?>>()
+               ?? new BaseResponse<Category?>(null, 400, "Falha ao atualizar a categoria");
     }
 
-    public Task<BaseResponse<Category?>> DeleteAsync(DeleteCategoryRequest request)
+    public async Task<BaseResponse<Category?>> DeleteAsync(DeleteCategoryRequest request)
     {
-        throw new NotImplementedException();
+        var result = await _client.DeleteAsync($"v1/categories{request.Id}");
+        return await result.Content.ReadFromJsonAsync<BaseResponse<Category?>>()
+               ?? new BaseResponse<Category?>(null, 400, "Falha ao excluir a categoria");
     }
 
-    public Task<BaseResponse<Category?>> GetByIdAsync(GetCategoryByIdRequest request)
+    public async Task<BaseResponse<Category?>> GetByIdAsync(GetCategoryByIdRequest request)
     {
-        throw new NotImplementedException();
+        return await _client.GetFromJsonAsync<BaseResponse<Category?>>($"v1/categories/{request.Id}") 
+               ?? new BaseResponse<Category?>(null, 400, "Não foi encontrado a categoria");
     }
 
-    public Task<PagedResponse<List<Category>>> GetAllAsync(GetAllCategoriesRequest request)
+    public async Task<PagedResponse<List<Category>>> GetAllAsync(GetAllCategoriesRequest request)
     {
-        throw new NotImplementedException();
+        return await _client.GetFromJsonAsync<PagedResponse<List<Category>>>("v1/categories") 
+            ?? new PagedResponse<List<Category>>(null, 400, "Falha ao obter os categorias");
     }
 }
