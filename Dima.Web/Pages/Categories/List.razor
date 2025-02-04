@@ -3,20 +3,24 @@
 
 <MudText Typo="Typo.h3">Categorias</MudText>
 <div class="d-flex justify-end">
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.TwoTone.Add" Href="/categorias/adicionar">
+    <MudButton
+        Variant="Variant.Filled"
+        Color="Color.Primary"
+        StartIcon="@Icons.Material.TwoTone.Add"
+        Href="/categorias/adicionar">
         NOVA CATEGORIA
     </MudButton>
 </div>
 
 <MudDataGrid
-    Class="pt-4"
+    Class="mt-4"
     Items="@Categories"
     Filterable="true"
     QuickFilter="Filter"
     Hideable="true">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Categorias</MudText>
-        <MudSpacer />
+        <MudSpacer/>
         <MudTextField
             @bind-Value="SearchTerm"
             Placeholder="Filtrar..."
@@ -30,5 +34,21 @@
     <Columns>
         <PropertyColumn Property="x => x.Id" Title="#"/>
         <PropertyColumn Property="x => x.Title" Title="Categoria"/>
+        <TemplateColumn Class="d-flex justify-end">
+            <CellTemplate>
+                <MudStack Row>
+                    <MudIconButton
+                        Icon="@Icons.Material.Filled.Edit"
+                        Href="@($"/categorias/editar/{context.Item.Id}")"
+                        Color="Color.Primary">
+                    </MudIconButton>
+                    <MudIconButton
+                        Icon="@Icons.Material.Filled.Delete"
+                        Color="Color.Error"
+                        aria-label="Excluir">
+                    </MudIconButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
     </Columns>
 </MudDataGrid>
