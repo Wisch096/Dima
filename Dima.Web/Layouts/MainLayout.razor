@@ -4,6 +4,7 @@
     @bind-IsDarkMode="_isDarkMode" 
     Theme="Configuration.Theme" />
 <MudSnackbarProvider />
+<MudPopoverProvider />
 
 <AuthorizeView>
     <Authorized>
@@ -31,7 +32,7 @@
                <NavMenu></NavMenu>
             </MudDrawer>
             <MudMainContent>
-                <MudContainer>
+                <MudContainer Class="mt-4">
                     @Body
                 </MudContainer>
             </MudMainContent>
