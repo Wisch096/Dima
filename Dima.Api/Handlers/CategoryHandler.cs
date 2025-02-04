@@ -107,23 +107,24 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
                 .AsNoTracking()
                 .Where(x => x.UserId == request.UserId)
                 .OrderBy(x => x.Title);
-        
+
             var categories = await query
                 .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync();
-        
+
             var count = await query.CountAsync();
-        
+
             return new PagedResponse<List<Category>>(
-                categories, 
-                count, 
-                request.PageNumber, 
+                categories,
+                count,
+                request.PageNumber,
                 request.PageSize);
         }
-        catch
+        catch (Exception ex)
         {
-            return new PagedResponse<List<Category>>(null, 500, "Não foi possível consultar as categorias.");
+            Console.WriteLine(ex.Message);
+            return new PagedResponse<List<Category>>(null, 500, "Não foi possível consultar as categorias");
         }
     }
 }
