@@ -34,7 +34,7 @@
     <Columns>
         <PropertyColumn Property="x => x.Id" Title="#"/>
         <PropertyColumn Property="x => x.Title" Title="Categoria"/>
-        <TemplateColumn Class="d-flex justify-end">
+        <TemplateColumn>
             <CellTemplate>
                 <MudStack Row>
                     <MudIconButton
@@ -45,7 +45,8 @@
                     <MudIconButton
                         Icon="@Icons.Material.Filled.Delete"
                         Color="Color.Error"
-                        aria-label="Excluir">
+                        aria-label="Excluir"
+                        >
                     </MudIconButton>
                 </MudStack>
             </CellTemplate>

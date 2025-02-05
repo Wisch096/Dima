@@ -64,6 +64,24 @@ public partial class ListCategoriesPage : ComponentBase
     
     #region Methods
 
+    public async void OnDeleteButtonClickedAsync(long id, string title)
+    {
+        var result = await DialogService.ShowMessageBox(
+            "ATENÇÃO", $"Ao prosseguir a categoria {title} será excluída. Esta é uma ação irreversível! Deseja continuar?",
+            yesText: "EXCLUIR",
+            cancelText: "Cancelar");
+
+        if (result is true) 
+            await OnDeleteAsync(id);
+        
+        StateHasChanged();
+    }
+
+    public async Task OnDeleteAsync(long id)
+    {
+        
+    }
+    
     public Func<Category, bool> Filter => category =>
     {
         if (string.IsNullOrEmpty(SearchTerm))
