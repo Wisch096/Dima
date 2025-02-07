@@ -77,10 +77,7 @@ public partial class ListCategoriesPage : ComponentBase
         StateHasChanged();
     }
 
-    public async Task OnDeleteAsync(long id)
-    {
-        
-    }
+    public async Task OnDeleteAsync(long id) { }
     
     public Func<Category, bool> Filter => category =>
     {
